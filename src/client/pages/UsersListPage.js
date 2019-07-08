@@ -10,11 +10,11 @@ class UsersListPage extends Component {
   render() {
     const { users } = this.props;
     return (
-      <div>
+      <div style={{padding: 100}}>
         <h1>List component!!!</h1>
-        <ul>
+        <ul className="collection">
           {users.map(user => (
-            <li key={user.id}>{user.name} </li>
+            <li key={user.id} className="collection-item">{user.name} </li>
           ))}
         </ul>
       </div>

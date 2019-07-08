@@ -13,7 +13,7 @@ export default [
         ...HomePage
       },
       {
-        path: "/user",
+        path: "/users",
         ...UsersListPage
       }
     ]
