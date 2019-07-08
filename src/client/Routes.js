@@ -1,16 +1,27 @@
-import React, { Component } from 'react';
-import { Route } from "react-router-dom";
-import Home from "./components/Home";
+import React from "react";
+import HomePage from "./pages/HomePage";
+import UsersListPage from "./pages/UsersListPage";
 
-class Routes extends Component {
-    render() {
-        return (
-            <div>
-               <Route exact path="/" component={Home}/>
-               <Route path="/h" component={() => "hiiiiiiiii"}/>
-            </div>
-        );
-    }
-}
+export default [
+  {
+    path: "/",
+    exact: true,
+    ...HomePage
+  },
+  {
+    path: "/user",
+    ...UsersListPage
+  }
+];
 
-export default Routes;
+// class Routes extends Component {
+//     render() {
+//         return (
+//             <div>
+//                <Route exact path="/" component={HomePage}/>
+//                {/*<Route path="/h" component={() => "hiiiiiiiii"}/>*/}
+//                <Route path="/users" component={UsersList}/>
+//             </div>
+//         );
+//     }
+// }
