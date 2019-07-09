@@ -11,23 +11,43 @@ import Routes from "./client/Routes";
 // const renderToString = require("react-dom/server").renderToString;
 // const HomePage = require("./client/components/HomePage").default;
 
-app.use("/api", proxy("http://react-ssr-api.herokuapp.com",{
-  proxyReqOptDecorator(opts){
-    opts.headers["x-forwarded-host"] = "localhost:3000";
-    return opts;
-  }
-}))
+app.use(
+  "/api",
+  proxy("http://react-ssr-api.herokuapp.com", {
+    proxyReqOptDecorator(opts) {
+      opts.headers["x-forwarded-host"] = "localhost:3000";
+      return opts;
+    }
+  })
+);
 app.use(express.static("public"));
 
 app.get("*", (req, res) => {
   const store = createStore(req);
 
-  const promises = matchRoutes(Routes, req.path).map(({ route }) => {
-    return route.loadData ? route.loadData(store) : null;
-  });
+  const promises = matchRoutes(Routes, req.path)
+    .map(({ route }) => {
+      return route.loadData ? route.loadData(store) : null;
+    })
+    .map(promise => {
+      if (promise) {
+        return new Promise(resolve => {
+          promise.then(resolve).catch(resolve);
+        });
+      }
+    });
 
   Promise.all(promises).then(() => {
-    res.send(renderer(req, store));
+    const context = {};
+    const content = renderer(req, store, context);
+
+    if (context.url) {
+      res.redirect(301, context.url);
+    }
+    if (context.notFound) {
+      res.status(404);
+    }
+    res.send(content);
   });
 });
 
