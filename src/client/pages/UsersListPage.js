@@ -10,7 +10,7 @@ class UsersListPage extends Component {
   render() {
     const { users } = this.props;
     return (
-      <div style={{padding: 100}}>
+      <div>
         <h1>List component!!!</h1>
         <ul className="collection">
           {users.map(user => (
